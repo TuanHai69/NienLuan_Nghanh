@@ -3,6 +3,7 @@ import 'package:flutter_application_1/ui/favorites/favorite_slide.dart';
 import 'package:flutter_application_1/ui/products/product_tab_tag.dart';
 
 import 'ui/articals/infor_page.dart';
+import 'ui/carts/cart_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
     const InforPage(),
     const ProductTabTag(),
     const FavoritePage(),
-    Container(color: Colors.purple),
+    const CartPage(),
     Container(color: Colors.blue),
   ];
 
