@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ui/accounts/account_page.dart';
 import 'package:flutter_application_1/ui/favorites/favorite_slide.dart';
 import 'package:flutter_application_1/ui/products/product_tab_tag.dart';
 
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     const ProductTabTag(),
     const FavoritePage(),
     const CartPage(),
-    Container(color: Colors.blue),
+    const AccountPage(),
   ];
 
   @override
@@ -33,31 +34,34 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Trang Chủ',
           ),
-          NavigationDestination(
+          BottomNavigationBarItem(
             icon: Icon(Icons.shop),
             label: 'Sản phẩm',
           ),
-          NavigationDestination(
+          BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Yêu thích',
           ),
-          NavigationDestination(
+          BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Giỏ hàng',
           ),
-          NavigationDestination(
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Tài Khoản',
           ),
         ],
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (value) {
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.pink, // Màu của biểu tượng khi được chọn
+        unselectedItemColor:
+            Colors.grey, // Màu của biểu tượng khi không được chọn
+        onTap: (value) {
           setState(() {
             _selectedIndex = value;
           });
