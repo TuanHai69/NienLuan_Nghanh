@@ -92,22 +92,6 @@ class ProductsManager with ChangeNotifier {
     }
   }
 
-  // void addProduct(Product product) {
-  //   _items.add(
-  //     product.copyWith(
-  //       id: 'p${DateTime.now().toIso8601String()}',
-  //     ),
-  //   );
-  //   notifyListeners();
-  // }
-
-  // void updateProduct(Product product) {
-  //   final index = _items.indexWhere((item) => item.id == product.id);
-  //   if (index >= 0) {
-  //     _items[index] = product;
-  //     notifyListeners();
-  //   }
-  // }
   Future<void> updateProduct(Product product) async {
     final index = _items.indexWhere((item) => item.id == product.id);
     if (index >= 0) {
@@ -118,10 +102,17 @@ class ProductsManager with ChangeNotifier {
     }
   }
 
-  // void toggleFavoriteStatus(Product product) {
-  //   final savedStatus = product.isFavorite;
-  //   product.isFavorite = !savedStatus;
-  // }
+  Future<void> updateProductQuantity(Product product, int quan) async {
+    product.instock -= quan;
+    final index = _items.indexWhere((item) => item.id == product.id);
+    if (index >= 0) {
+      if (await _productsService.updateProduct(product)) {
+        _items[index] = product;
+        notifyListeners();
+      }
+    }
+  }
+
   Future<void> toggleFavoriteStatus(Product product) async {
     final savedStatus = product.isFavorite;
     product.isFavorite = !savedStatus;
@@ -131,12 +122,6 @@ class ProductsManager with ChangeNotifier {
     }
   }
 
-  // void deleteProduct(String id) {
-  //   final index = _items.indexWhere((item) => item.id == id);
-  //   _items.removeAt(index);
-
-  //   notifyListeners();
-  // }
   Future<void> deleteProduct(String id) async {
     final index = _items.indexWhere((item) => item.id == id);
     Product? existingProduct = _items[index];

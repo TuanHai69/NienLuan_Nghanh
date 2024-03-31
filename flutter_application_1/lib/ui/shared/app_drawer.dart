@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ui/articals/article_slide.dart';
 import 'package:provider/provider.dart';
 
+import '../articals/user_article_screen.dart';
 import '../auth/auth_manager.dart';
 import '../orders/orders_screen.dart';
 import '../products/user_products_screen.dart';
@@ -23,6 +25,24 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Shop'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed('/');
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.payment),
+            title: const Text('Articles'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(ArticleSlide.routeName);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.article_outlined),
+            title: const Text('Edit article'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(UserArticlesScreen.routeName);
             },
           ),
           const Divider(),

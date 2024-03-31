@@ -2,21 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
+import 'ui/articals/article_slide.dart';
 import 'ui/screens.dart';
-
-// import 'package:myshop/ui/cart/cart_manager.dart';
-// import 'package:myshop/ui/orders/order_manager.dart';
 import 'ui/products/edit_product_screen.dart';
-
-// import 'ui/products/products_manager.dart';
-// import 'ui/products/product_detail_screen.dart';
-
-// import 'ui/products/user_products_screen.dart';
-
-// import 'ui/products/products_overview_screen.dart';
-
-// import 'ui/cart/cart_screen.dart';
-// import 'ui/orders/orders_screen.dart';
 
 Future<void> main() async {
   // (1) Load the .env file
@@ -30,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: Colors.purple,
+      seedColor: Colors.indigo,
       secondary: Colors.deepOrange,
       background: Colors.white,
       surfaceTint: Colors.grey[200],
@@ -73,6 +61,15 @@ class MyApp extends StatelessWidget {
             return productsManager;
           },
         ),
+        ChangeNotifierProxyProvider<AuthManager, ArticlesManager>(
+          create: (ctx) => ArticlesManager(),
+          update: (ctx, authManager, articlesManager) {
+            // Khi authManager có báo hiệu thay đổi thì đọc lại authToken
+            // cho cartManager
+            articlesManager!.authToken = authManager.authToken;
+            return articlesManager;
+          },
+        ),
         ChangeNotifierProxyProvider<AuthManager, CartManager>(
           create: (ctx) => CartManager(),
           update: (ctx, authManager, cartManager) {
@@ -106,7 +103,10 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: themeData,
           home: authManager.isAuth
-              ? const SafeArea(child: ProductsOverviewScreen())
+              ? const SafeArea(
+                  child: ProductsOverviewScreen(),
+                  // HomePage(),
+                )
               : FutureBuilder(
                   future: authManager.tryAutoLogin(),
                   builder: (ctx, snapshot) {
@@ -119,11 +119,17 @@ class MyApp extends StatelessWidget {
             CartScreen.routeName: (ctx) => const SafeArea(
                   child: CartScreen(),
                 ),
+            ArticleSlide.routeName: (ctx) => const SafeArea(
+                  child: ArticleSlide(),
+                ),
             OrdersScreen.routeName: (ctx) => const SafeArea(
                   child: OrdersScreen(),
                 ),
             UserProductsScreen.routeName: (ctx) => const SafeArea(
                   child: UserProductsScreen(),
+                ),
+            UserArticlesScreen.routeName: (ctx) => const SafeArea(
+                  child: UserArticlesScreen(),
                 ),
           },
           onGenerateRoute: (settings) {
@@ -154,24 +160,22 @@ class MyApp extends StatelessWidget {
                 },
               );
             }
+            if (settings.name == EditArticleScreen.routeName) {
+              final articleId = settings.arguments as String?;
+              return MaterialPageRoute(
+                builder: (ctx) {
+                  return SafeArea(
+                    child: EditArticleScreen(
+                      articleId != null
+                          ? ctx.read<ArticlesManager>().findById(articleId)
+                          : null,
+                    ),
+                  );
+                },
+              );
+            }
             return null;
           },
-          // const SafeArea(child: OrdersScreen()
-          // CartScreen(),
-          // ProductsOverviewScreen(),
-          // UserProductsScreen(),
-          // ProductDetailScreen(
-          //   ProductsManager().items[0],
-          // ),
-          // ),
-          // Scaffold(
-          //   appBar: AppBar(
-          //     title: const Text('MyShop'),
-          //   ),
-          //   body: const Center(
-          //     child: Text('Welcome to MyShop'),
-          //   ),
-          // ),
         );
       }),
     );

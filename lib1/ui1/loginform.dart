@@ -15,13 +15,13 @@ class LoginForm extends StatelessWidget {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          const Text(
-            'Login',
-            style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
-                color: Color.fromARGB(255, 4, 0, 90)),
-          ),
+          // const Text(
+          //   'Login',
+          //   style: TextStyle(
+          //       fontSize: 24,
+          //       fontWeight: FontWeight.w900,
+          //       color: Color.fromARGB(255, 4, 0, 90)),
+          // ),
           const SizedBox(
             height: 30,
           ),

@@ -3,6 +3,10 @@ export 'products/product_detail_screen.dart';
 export 'products/user_products_screen.dart';
 export 'products/products_manager.dart';
 
+export 'articals/edit_article_screen.dart';
+export 'articals/article_manager.dart';
+export 'articals/user_article_screen.dart';
+
 export 'orders/orders_screen.dart';
 export 'orders/order_manager.dart';
 

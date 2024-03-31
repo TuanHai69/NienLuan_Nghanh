@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../ui/orders/order_manager.dart';
 import 'package:provider/provider.dart';
 
+import '../products/products_manager.dart';
 import 'cart_manager.dart';
 import 'cart_item_card.dart';
 
@@ -70,6 +71,28 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
+// class CartItemList extends StatelessWidget {
+//   const CartItemList(
+//     this.cart, {
+//     super.key,
+//   });
+
+//   final CartManager cart;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView(
+//       children: cart.productEntries
+//           .map(
+//             (entry) => CartItemCard(
+//               productId: entry.key,
+//               cartItem: entry.value,
+//             ),
+//           )
+//           .toList(),
+//     );
+//   }
+// }
 class CartItemList extends StatelessWidget {
   const CartItemList(
     this.cart, {
@@ -80,15 +103,23 @@ class CartItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productsManager =
+        Provider.of<ProductsManager>(context, listen: false);
+
     return ListView(
-      children: cart.productEntries
-          .map(
-            (entry) => CartItemCard(
-              productId: entry.key,
+      children: cart.productEntries.map(
+        (entry) {
+          final product = productsManager.findById(entry.key);
+          if (product != null) {
+            return CartItemCard(
+              product: product,
               cartItem: entry.value,
-            ),
-          )
-          .toList(),
+            );
+          } else {
+            return const Text('Product not found');
+          }
+        },
+      ).toList(),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'auth_card.dart';
-import 'app_banner.dart';
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
@@ -10,42 +9,27 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.sizeOf(context);
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                  const Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: const [0, 1],
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: SizedBox(
-              height: deviceSize.height,
-              width: deviceSize.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const Flexible(
-                    child: AppBanner(),
-                  ),
-                  Flexible(
-                    flex: deviceSize.width > 600 ? 2 : 1,
-                    child: const AuthCard(),
-                  ),
-                ],
-              ),
-            ),
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage('image/login.jpg'),
+              fit: BoxFit.cover,
+            )),
+            child: Center(
+                child: Container(
+              width: 320,
+              height: 500,
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  border: Border.all(color: Colors.blue, width: 2),
+                  borderRadius: BorderRadius.circular(30)),
+              child: const AuthCard(),
+            )),
           ),
         ],
       ),

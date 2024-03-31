@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/product.dart';
 import '../cart/cart_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/cart_item.dart';
+import '../products/products_manager.dart';
 import '../shared/dialog_utils.dart';
 
 class CartItemCard extends StatelessWidget {
-  final String productId;
+  final Product product;
   final CartItem cartItem;
 
   const CartItemCard({
-    required this.productId,
+    required this.product,
     required this.cartItem,
     super.key,
   });
@@ -42,7 +44,10 @@ class CartItemCard extends StatelessWidget {
       },
       onDismissed: (direction) {
         // Xóa sản phẩm khỏi giỏ hàng
-        context.read<CartManager>().clearItem(productId);
+        context
+            .read<ProductsManager>()
+            .updateProductQuantity(product, -cartItem.quantity);
+        context.read<CartManager>().clearItem(product.id as String);
         // print('Cart item dismissed');
       },
       child: ItemInfoCard(cartItem),

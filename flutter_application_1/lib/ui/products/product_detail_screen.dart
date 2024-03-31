@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../ui/cart/cart_manager.dart';
@@ -7,9 +5,8 @@ import '../../ui/products/products_overview_screen.dart';
 import 'package:provider/provider.dart';
 import '../cart/cart_screen.dart';
 import '../../ui/products/top_right_badge.dart';
-// import 'dart:developer' as dev;
-
 import '../../models/product.dart';
+import 'products_manager.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/product-detail';
@@ -53,13 +50,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               )),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
-            child: FavoriteIcon(
-              widget: widget,
+            child: ProductGridFooter(
+              product: widget.product,
               onFavoritePressed: () {
-                widget.product.isFavorite = !widget.product.isFavorite;
+                context
+                    .read<ProductsManager>()
+                    .toggleFavoriteStatus(widget.product);
               },
             ),
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -76,7 +75,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             height: 10,
           ),
           Text(
-            '\$${widget.product.price}',
+            'Price: \$${widget.product.price} | Instock: ${widget.product.instock}',
             style: const TextStyle(color: Colors.grey, fontSize: 20),
           ),
           const SizedBox(
@@ -142,6 +141,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     setState(() {
                       _count++;
                       _value.text = '$_count';
+                      if (_count > widget.product.instock) {
+                        _count = widget.product.instock;
+                        _value.text = '$_count';
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(const SnackBar(
+                            content: Text(
+                              'the count must not greater than instock',
+                              textAlign: TextAlign.center,
+                            ),
+                          ));
+                      }
                     });
                   },
                   icon: const Icon(
@@ -161,6 +172,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                         ));
                     } else {
+                      context
+                          .read<ProductsManager>()
+                          .updateProductQuantity(widget.product, _count);
                       context
                           .read<CartManager>()
                           .addDetailItemQuantity(widget.product, _count);
@@ -268,6 +282,33 @@ class ShoppingCB extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class ProductGridFooter extends StatelessWidget {
+  const ProductGridFooter({
+    super.key,
+    required this.product,
+    this.onFavoritePressed,
+  });
+
+  final Product product;
+  final void Function()? onFavoritePressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: product.isFavoriteListenable,
+      builder: (ctx, isFavorite, child) {
+        return IconButton(
+          icon: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+          ),
+          color: Theme.of(context).colorScheme.secondary,
+          onPressed: onFavoritePressed,
+        );
+      },
+    );
   }
 }
 

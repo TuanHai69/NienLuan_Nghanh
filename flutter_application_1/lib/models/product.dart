@@ -5,6 +5,8 @@ class Product {
   final String title;
   final String description;
   final double price;
+  int instock;
+  final int loveCount;
   final String imageUrl;
   final ValueNotifier<bool> _isFavorite;
 
@@ -13,6 +15,8 @@ class Product {
       'title': title,
       'description': description,
       'price': price,
+      'instock': instock,
+      'loveCount': loveCount,
       'imageUrl': imageUrl,
     };
   }
@@ -23,6 +27,8 @@ class Product {
       title: json['title'],
       description: json['description'],
       price: json['price'],
+      instock: json['instock'],
+      loveCount: json['loveCount'],
       imageUrl: json['imageUrl'],
     );
   }
@@ -32,6 +38,8 @@ class Product {
     required this.title,
     required this.description,
     required this.price,
+    required this.instock,
+    required this.loveCount,
     required this.imageUrl,
     isFavorite = false,
   }) : _isFavorite = ValueNotifier(isFavorite);
@@ -53,6 +61,8 @@ class Product {
     String? title,
     String? description,
     double? price,
+    int? instock,
+    int? loveCount,
     String? imageUrl,
     bool? isFavorite,
   }) {
@@ -61,6 +71,8 @@ class Product {
       title: title ?? this.title,
       description: description ?? this.description,
       price: price ?? this.price,
+      instock: instock ?? this.instock,
+      loveCount: loveCount ?? this.loveCount,
       imageUrl: imageUrl ?? this.imageUrl,
       isFavorite: isFavorite ?? this.isFavorite,
     );
